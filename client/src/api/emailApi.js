@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/emails";
+const API_URL = "https://email-scheduling-server-1.onrender.com/api/emails";
 
 export const sendEmail = async (email) => {
   try {
