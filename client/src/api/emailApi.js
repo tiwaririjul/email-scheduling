@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API_URL = "https://email-scheduling-server-1.onrender.com/api/emails";
-const API_URL = "http://localhost:4000/api/emails";
+const API_URL = "https://email-scheduling-server-2.onrender.com/api/emails";
+// const API_URL = "http://localhost:4000/api/emails";
 
 export const sendEmail = async (email, scheduleDateTime) => {
   console.log({ email, scheduleDateTime });
