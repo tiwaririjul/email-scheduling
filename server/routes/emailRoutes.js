@@ -2,8 +2,8 @@ const express = require("express");
 const emailController = require("../controllers/emailController");
 const router = express.Router();
 
-router.post("/start-cron", emailController.sendEmail);
-router.get("/stop-cron", emailController.stopCron);
+router.post("/schedule-email", emailController.scheduleEmail);
+router.post("/cancel-email", emailController.cancelEmail);
 router.post("/update-email", emailController.updateEmail);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-require("./cron/emailJob");
+// require("./cron/emailJob");
 
 const PORT = process.env.PORT || 4000;
 
