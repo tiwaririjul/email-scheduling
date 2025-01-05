@@ -8,6 +8,8 @@ const EnhancedEmailForm = () => {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [error, setError] = useState("");
+  const [loadingPrompt, setLoadingPrompt] = useState(false);
+  const [loadingEmail, setLoadingEmail] = useState(false);
 
   const isValidEmail = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -20,18 +22,23 @@ const EnhancedEmailForm = () => {
       return;
     }
 
+    setLoadingPrompt(true);
+    setError("");
+
     try {
       const response = await generatePrompt(messageType);
       if (response.success) {
         setMessage(response.prompt || `Generated prompt for ${messageType}`);
         toast.success("Prompt generated successfully", {
-          autoClose: 2000, // 3 seconds
+          autoClose: 2000,
         });
       } else {
         setError(response.message);
       }
     } catch (err) {
       setError("An error occurred while generating the prompt.");
+    } finally {
+      setLoadingPrompt(false);
     }
   };
 
@@ -45,14 +52,15 @@ const EnhancedEmailForm = () => {
       return;
     }
 
+    setLoadingEmail(true);
+    setError("");
+
     try {
       const response = await sendEmail(email, subject, message);
       if (response.success) {
-        // alert("Email sent successfully.");
         toast.success("Email sent successfully.", {
-          autoClose: 2000, // 3 seconds
+          autoClose: 2000,
         });
-
         setEmail("");
         setSubject("");
         setMessage("");
@@ -62,6 +70,8 @@ const EnhancedEmailForm = () => {
       }
     } catch (err) {
       setError("An error occurred while sending the email.");
+    } finally {
+      setLoadingEmail(false);
     }
   };
 
@@ -100,9 +110,12 @@ const EnhancedEmailForm = () => {
             />
             <button
               onClick={handleGeneratePrompt}
-              className="bg-blue-500 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              disabled={loadingPrompt}
+              className={`bg-blue-500 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                loadingPrompt ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
-              Generate
+              {loadingPrompt ? "Generating..." : "Generate"}
             </button>
           </div>
           <textarea
@@ -117,9 +130,12 @@ const EnhancedEmailForm = () => {
           {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           <button
             onClick={handleSendEmail}
-            className="w-full bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
+            disabled={loadingEmail}
+            className={`w-full bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 ${
+              loadingEmail ? "opacity-70 cursor-not-allowed" : ""
+            }`}
           >
-            Send Email
+            {loadingEmail ? "Sending..." : "Send Email"}
           </button>
         </div>
       </div>
